@@ -1,0 +1,9 @@
+﻿@model IEnumerable<Timetable.Models.Teacher>
+@{
+    ViewBag.Title = "Добро пожаловать";
+}
+
+<a Content(User.Identity.Name)></a>
+<div><a asp-action="AuthorizeIndex">Войти</a></div>
+<div><a asp-action="Teacher">Добавить преподователя</a></div>
+<div><a asp-action="Logout" asp-controller="Account">Выйти</a></div>

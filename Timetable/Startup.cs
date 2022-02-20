@@ -36,8 +36,9 @@ namespace Timetable
                     {
                         options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                     });
-            
+
             // добавляем контекст Context в качестве сервиса в приложение
+            services.AddDbContext<TimetableContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<ClassroomContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<GroupContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<LessonContext>(options => options.UseSqlServer(connection));

@@ -1,9 +1,9 @@
-﻿@model IEnumerable<Timetable.Models.Teacher>
-@{
+﻿@{
     ViewBag.Title = "Расписание";
 }
 
 <td><a>Добро пожаловать: </a>@User.Identity.Name</td>
+<div><a asp-action="Timetable" asp-controller="Timetable">Расписание</a></div>
 <div><a asp-action="Teacher" asp-controller="Teacher">Преподаватели</a></div>
 <div><a asp-action="Lesson" asp-controller="Lesson">Предметы</a></div>
 <div><a asp-action="Classroom" asp-controller="Classroom">Аудитории</a></div>

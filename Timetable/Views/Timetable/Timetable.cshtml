@@ -1,0 +1,22 @@
+﻿@using Timetable.Models
+@model СhoiceViewModel
+@{
+    ViewBag.Title = "Расписание";
+}
+
+<h2>Расписание</h2>
+<a>Выберите курс и группу</a>
+<form method="post">
+    <div>
+        <div>
+
+            <label asp-for="PeriodCourses">Курс</label>
+            <select asp-for="PeriodCourses" asp-items="Html.GetEnumSelectList<Courses>()"></select>
+            <label asp-for="PeriodGroups">Группа</label>
+            <select asp-for="PeriodGroups" asp-items="Html.GetEnumSelectList<Groups>()"></select>
+        </div>
+        <div>
+            <input type="submit" value="Открыть" />
+        </div>
+    </div>
+</form>

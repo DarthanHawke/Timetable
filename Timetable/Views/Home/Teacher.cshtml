@@ -7,10 +7,16 @@
     <div class="form-group">
         <a asp-action="Create">Добавить преподователя</a>
         <table class="table">
-            <tr><td>ФИО</td><td>Специальность</td><td>Кафедра</td><td>Звание</td></tr>
+            <tr><td>ФИО</td>
             @foreach (var item in Model)
             {
-            <tr><td>@item.FIO</td><td>@item.Specialization</td><td>@item.Department</td><td>@item.Title</td></tr>
+            <tr><td>@item.FIO</td>
+            <td>
+                <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Id_Teacher">Подробнее</a> |
+                <a asp-action="Edit" asp-controller="Home" asp-route-id="@item.Id_Teacher">Изменить</a> |
+                <a asp-action="Delete" asp-controller="Home" asp-route-id="@item.Id_Teacher">Удалить</a>
+            </td>
+            </tr>
             }
         </table>
     </div>

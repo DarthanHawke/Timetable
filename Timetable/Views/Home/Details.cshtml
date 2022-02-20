@@ -1,0 +1,20 @@
+﻿@model Timetable.Models.Teacher
+@{
+    ViewBag.Title = Model.FIO;
+}
+<h2>Преподователь @Model.FIO</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id_Teacher</dd>
+
+        <dt>Специальность</dt>
+        <dd>@Model.Specialization</dd>
+
+        <dt>Кафедра</dt>
+        <dd>@Model.Department</dd>
+
+        <dt>Звание</dt>
+        <dd>@Model.Title</dd>
+    </dl>
+</div>

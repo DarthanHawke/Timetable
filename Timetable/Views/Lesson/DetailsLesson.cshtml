@@ -1,0 +1,17 @@
+﻿@model Timetable.Models.LessonU
+@{
+    ViewBag.Title = Model.Name;
+}
+<h2>Название предмета @Model.Name</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id_Lesson</dd>
+
+        <dt>Тип предмета</dt>
+        <dd>@Model.TypeLesson</dd>
+
+        <dt>Цикличность</dt>
+        <dd>@Model.Cyclicality</dd>
+    </dl>
+</div>

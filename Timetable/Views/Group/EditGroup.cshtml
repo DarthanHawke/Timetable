@@ -1,0 +1,21 @@
+﻿@model Timetable.Models.GroupU
+@{
+    ViewBag.Title = "Редактирование группы";
+}
+<form asp-action="EditGroup" asp-controller="Group" asp-route-Id_Group="@Model.Id_Group">
+    <div class="form-group">
+        <label asp-for="Course" class="control-label">Курс</label>
+        <input type="number" asp-for="Course" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Number" class="control-label">Колличество человек</label>
+        <input type="number" asp-for="Number" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberGroup" class="control-label">Номер</label>
+        <input type="number" asp-for="NumberGroup" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-default" />
+    </div>
+</form>

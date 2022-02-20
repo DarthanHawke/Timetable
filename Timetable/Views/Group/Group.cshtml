@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Timetable.Models.GroupU>
+@{
+    ViewBag.Title = "Группы";
+}
+
+<form asp-action="Group" asp-controller="Group">
+    <div class="form-group">
+        <a asp-action="CreateGroup">Добавить группу</a>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="Group" asp-route-sortOrder="@ViewBag.CourseSort">
+                        Курс
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Group" asp-route-sortOrder="@ViewBag.NumberSort">
+                        Колличество человек
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Group" asp-route-sortOrder="@ViewBag.NumberGroupSort">
+                        Номер
+                    </a>
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Course</td>
+                    <td>@item.Number</td>
+                    <td>@item.NumberGroup</td>
+                    <td>
+                        <a asp-action="DetailsGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Подробнее</a> |
+                        <a asp-action="EditGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Изменить</a> |
+                        <a asp-action="DeleteGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</form>

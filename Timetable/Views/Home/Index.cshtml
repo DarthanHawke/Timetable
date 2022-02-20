@@ -1,9 +1,11 @@
 ﻿@model IEnumerable<Timetable.Models.Teacher>
 @{
-    ViewBag.Title = "Добро пожаловать";
+    ViewBag.Title = "Расписание";
 }
 
-<a Content(User.Identity.Name)></a>
-<div><a asp-action="AuthorizeIndex">Войти</a></div>
+<td><a>Добро пожаловать: </a>@User.Identity.Name</td>
 <div><a asp-action="Teacher" asp-controller="Teacher">Преподаватели</a></div>
+<div><a asp-action="Lesson" asp-controller="Lesson">Предметы</a></div>
+<div><a asp-action="Classroom" asp-controller="Classroom">Аудитории</a></div>
+<div><a asp-action="Group" asp-controller="Group">Группы</a></div>
 <div><a asp-action="Logout" asp-controller="Account">Выйти</a></div>

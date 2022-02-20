@@ -1,0 +1,17 @@
+﻿@model Timetable.Models.GroupU
+@{
+    ViewBag.Title = Model.NumberGroup;
+}
+<h2>Номер группы @Model.NumberGroup</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Индентификатор группы</dt>
+        <dd>@Model.Id_Group</dd>
+
+        <dt>Курс</dt>
+        <dd>@Model.Course</dd>
+
+        <dt>Колличество человек</dt>
+        <dd>@Model.Number</dd>
+    </dl>
+</div>

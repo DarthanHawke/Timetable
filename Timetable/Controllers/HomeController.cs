@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Timetable.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        [Authorize]
         public IActionResult AuthorizeIndex()
         {
             return RedirectToAction("Index");

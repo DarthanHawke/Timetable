@@ -1,0 +1,23 @@
+﻿@model Timetable.Models.Classroom
+@{
+    ViewBag.Title = Model.Id_Class;
+}
+<h2>Номер аудитории @Model.Id_Class</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Тип аудитории</dt>
+        <dd>@Model.TypeClass</dd>
+
+        <dt>Вместимость аудитории</dt>
+        <dd>@Model.Capacity</dd>
+
+        <dt>Наличие проектора</dt>
+        <dd>@Model.Projector</dd>
+
+        <dt>Наличие доски</dt>
+        <dd>@Model.Board</dd>
+
+        <dt>Дополнительный инвентарь</dt>
+        <dd>@Model.Equipment</dd>
+    </dl>
+</div>

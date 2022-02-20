@@ -3,7 +3,7 @@
 
 namespace Timetable.Models
 {
-    public class Lesson
+    public class LessonU
     {
         [Key]
         public int Id_Lesson { get; set; } //id предмета

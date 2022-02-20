@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Timetable.Models.LessonU>
+@{
+    ViewBag.Title = "Предметы";
+}
+
+<form asp-action="Lesson" asp-controller="Lesson">
+    <div class="form-group">
+        <a asp-action="CreateLesson">Добавить предмет</a>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="Lesson" asp-route-sortOrder="@ViewBag.TypeLessonSort">
+                        Тип
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Lesson" asp-route-sortOrder="@ViewBag.NameSort">
+                        Название
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Lesson" asp-route-sortOrder="@ViewBag.CyclicalitySort">
+                        Цикличность
+                    </a>
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TypeLesson</td>
+                    <td>@item.Name</td>
+                    <td>@item.Cyclicality</td>
+                    <td>
+                        <a asp-action="DetailsLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Подробнее</a> |
+                        <a asp-action="EditLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Изменить</a> |
+                        <a asp-action="DeleteLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</form>

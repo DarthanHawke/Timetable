@@ -7,19 +7,19 @@ using System.Linq;
 
 namespace Timetable.Controllers
 {
+    [Authorize]
     public class TeacherController : Controller
     {
-        private TeacherContext db;
+        private TeacherContext tdb;
 
         public TeacherController(TeacherContext context)
         {
-            db = context;
+            tdb = context;
         }
 
-        [Authorize]
         public async Task<IActionResult> Teacher(TeacherSortState sortOrder = TeacherSortState.FIOAsc)
         {
-            IQueryable<Teacher> teacher = db.Teachers;
+            IQueryable<Teacher> teacher = tdb.Teachers;
 
             ViewData["FIOSort"] = sortOrder == TeacherSortState.FIOAsc ? TeacherSortState.FIODesc : TeacherSortState.FIOAsc;
             ViewData["SpecializationSort"] = sortOrder == TeacherSortState.SpecializationAsc ? TeacherSortState.SpecializationDesc : TeacherSortState.SpecializationAsc;
@@ -48,8 +48,8 @@ namespace Timetable.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTeacher(Teacher teacher)
         {
-            db.Teachers.Add(teacher);
-            await db.SaveChangesAsync();
+            tdb.Teachers.Add(teacher);
+            await tdb.SaveChangesAsync();
             return RedirectToAction("Teacher");
         }
 
@@ -57,7 +57,7 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
-                Teacher teacher = await db.Teachers.FirstOrDefaultAsync(p => p.Id_Teacher == id);
+                Teacher teacher = await tdb.Teachers.FirstOrDefaultAsync(p => p.Id_Teacher == id);
                 if (teacher != null)
                     return View(teacher);
             }
@@ -68,7 +68,7 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
-                Teacher teacher = await db.Teachers.FirstOrDefaultAsync(p => p.Id_Teacher == id);
+                Teacher teacher = await tdb.Teachers.FirstOrDefaultAsync(p => p.Id_Teacher == id);
                 if (teacher != null)
                     return View(teacher);
             }
@@ -78,8 +78,8 @@ namespace Timetable.Controllers
         [HttpPost]
         public async Task<IActionResult> EditTeacher(Teacher teacher)
         {
-            db.Teachers.Update(teacher);
-            await db.SaveChangesAsync();
+            tdb.Teachers.Update(teacher);
+            await tdb.SaveChangesAsync();
             return RedirectToAction("Teacher");
         }
 
@@ -89,7 +89,7 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
-                Teacher teacher = await db.Teachers.FirstOrDefaultAsync(p => p.Id_Teacher == id);
+                Teacher teacher = await tdb.Teachers.FirstOrDefaultAsync(p => p.Id_Teacher == id);
                 if (teacher != null)
                     return View(teacher);
             }
@@ -102,13 +102,11 @@ namespace Timetable.Controllers
             if (id != null)
             {
                 Teacher teacher = new Teacher { Id_Teacher = id.Value };
-                db.Entry(teacher).State = EntityState.Deleted;
-                await db.SaveChangesAsync();
+                tdb.Entry(teacher).State = EntityState.Deleted;
+                await tdb.SaveChangesAsync();
                 return RedirectToAction("Teacher");
             }
             return NotFound();
         }
-
-
     }
 }

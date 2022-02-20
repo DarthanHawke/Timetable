@@ -3,7 +3,7 @@
 
 namespace Timetable.Models
 {
-    public class Classrooms
+    public class Classroom
     {
         [Key]
         public int Id_Class { get; set; } //id аудитории

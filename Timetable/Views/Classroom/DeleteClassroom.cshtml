@@ -1,0 +1,41 @@
+﻿@model Timetable.Models.Classroom
+@{
+    ViewBag.Title = "Удаление аудитории";
+}
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>Тип</dt>
+        <dd>
+            @Html.DisplayFor(model => model.TypeClass)
+        </dd>
+
+        <dt>Вместимость</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Capacity)
+        </dd>
+
+        <dt>Проектор</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Projector)
+        </dd>
+
+        <dt>Доска</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Board)
+        </dd>
+
+        <dt>Инвентарь</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Equipment)
+        </dd>
+    </dl>
+
+    <div>
+        <form asp-controller="Classroom" asp-action="DeleteClassroom" method="post">
+            <div class="form-group">
+                <input type="submit" class="btn btn-default" value="Удалить" />
+            </div>
+        </form>
+    </div>
+</div>

@@ -38,7 +38,7 @@ namespace Timetable
                     });
             
             // добавляем контекст ApplicationContext в качестве сервиса в приложение
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<TeacherContext>(options => options.UseSqlServer(connection));
 
             services.AddControllersWithViews();
         }

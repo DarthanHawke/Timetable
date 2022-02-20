@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Timetable.Models.Teacher>
+    @{
+    ViewBag.Title = "Все пользователи";
+    }
+
+<form asp-action="Teacher" asp-controller="Teacher">
+    <div class="form-group">
+        <a asp-action="CreateTeacher">Добавить преподователя</a>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="Teacher" asp-route-sortOrder="@ViewBag.FIOSort">
+                        ФИО
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Teacher" asp-route-sortOrder="@ViewBag.SpecializationSort">
+                        Специальность
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Teacher" asp-route-sortOrder="@ViewBag.DepartmentSort">
+                        Кафедра
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Teacher" asp-route-sortOrder="@ViewBag.TitleSort">
+                        Звание
+                    </a>
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FIO</td>
+                    <td>@item.Specialization</td>
+                    <td>@item.Department</td>
+                    <td>@item.Title</td>
+                    <td>
+                        <a asp-action="DetailsTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Подробнее</a> |
+                        <a asp-action="EditTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Изменить</a> |
+                        <a asp-action="DeleteTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</form>

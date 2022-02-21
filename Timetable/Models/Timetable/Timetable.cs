@@ -15,4 +15,16 @@ namespace Timetable.Models
         public int Id_User { get; set; } //id пользователя
         public int Id_Group { get; set; } //id группы
     }
+
+    public class NewTimetable
+    {
+        [Key]
+        public int Id_Date { get; set; } //id даты
+        public DateTime Date { get; set; } //дата поставленной пары
+        public int Course { get; set; }
+        public int NumberGroup { get; set; }
+        public string FIOteacher { get; set; }
+        public string NameLesson { get; set; }
+        public string NumberClass { get; set; }
+    }
 }

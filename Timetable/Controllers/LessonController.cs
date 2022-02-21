@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace Timetable.Controllers
 {
-    [Authorize]
     public class LessonController : Controller
     {
         private LessonContext ldb;

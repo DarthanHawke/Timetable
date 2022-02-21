@@ -22,6 +22,25 @@ namespace Timetable.Controllers
             ttdb = context;
         }
 
+        public IQueryable<NewTimetable> NewTimetable()
+        {
+            IQueryable<NewTimetable> NewTimetables = from timetable in ttdb.Timetables
+                                                     join groups in ttdb.Groups on timetable.Id_Group equals groups.Id_Group
+                                                     join teachers in ttdb.Teachers on timetable.Id_Teacher equals teachers.Id_Teacher
+                                                     join lessons in ttdb.Lessons on timetable.Id_Lesson equals lessons.Id_Lesson
+                                                     join classrooms in ttdb.Classrooms on timetable.Id_Class equals classrooms.Id_Class
+                                                     select new NewTimetable
+                                                     {
+                                                         Date = timetable.Date,
+                                                         Course = groups.Course,
+                                                         NumberGroup = groups.NumberGroup,
+                                                         FIOteacher = teachers.FIO,
+                                                         NameLesson = lessons.Name,
+                                                         NumberClass = classrooms.NumberClass
+                                                     };
+            return NewTimetables;
+        }
+
         public IActionResult Timetable()
         {
             return View();
@@ -29,29 +48,31 @@ namespace Timetable.Controllers
         [HttpPost]
         public IActionResult Timetable(СhoiceViewModel model)
         {
-            string[] weekday = new string[6] { "20210221T", "20210222T", "20210223T", "20210224T", "20210225T", "20210226T" };
-            string[] time = new string[8] { "08:00:00Z", "09:45:00Z", "11:30:00Z", "13:25:00Z", "15:10:00Z", "16:55:00Z", "18:40:00Z", "20:10:00Z" };
+            string[] weekday = new string[6] { "2022-02-21T", "2022-02-22T", "2022-02-23T", "2022-02-24T", "2022-02-25T", "2022-02-26T" };
+            string[] time = new string[8] { "08:00:00", "09:45:00", "11:30:00", "13:25:00", "15:10:00", "16:55:00", "18:40:00", "20:10:00" };
 
 
-            var courseset = model.PeriodCourses.ToString();
-            var groupeset = model.PeriodGroups.ToString();
+            var courseset = model.ViewCourses(model.PeriodCourses);
+            var groupeset = model.ViewGroups(model.PeriodGroups);
 
 
             var timetable = ttdb.Groups.Where(p => p.Course.ToString() == courseset)
-                .Union(ttdb.Groups.Where(p => p.NumberGroup.ToString() == groupeset));
+                .Where(p => p.NumberGroup.ToString() == groupeset).Select(p => p.Id_Group).ToArray()[0];
+
+            var pairtb = ttdb.Timetables.Where(p => p.Id_Group == timetable);
+
+
             Teacher[,] teachers = new Teacher[6, 8];
             LessonU[,] lessons = new LessonU[6, 8];
             Classroom[,] classrooms = new Classroom[6, 8];
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-
-
             for (var i = 0; i < 6; ++i)
             {
                 for (var j = 0; j < 8; ++j)
                 {
-                    DateTime pairdate = DateTime.ParseExact(weekday[i] + time[j], "yyyyMMddTHH:mm:ssZ", provider);
-                    var pair = ttdb.Timetables.FirstOrDefault(p => p.Date == pairdate);
+                    DateTime pairdate = DateTime.ParseExact(weekday[i] + time[j], "yyyy-MM-ddTHH:mm:ss", provider);
+                    var pair = pairtb.FirstOrDefault(p => p.Date == pairdate);
                     if (pair != null)
                     {
                         teachers[i, j] = ttdb.Teachers.FirstOrDefault(p => p.Id_Teacher == pair.Id_Teacher);
@@ -81,9 +102,109 @@ namespace Timetable.Controllers
                     ViewBag.classrooms[i, j] = classrooms[i, j].NumberClass;
                 }
             }
-            ViewBag.courseset = model.PeriodCourses.ToString();
-            ViewBag.groupeset = model.PeriodGroups.ToString();
+            ViewBag.courseset = model.ViewCourses(model.PeriodCourses);
+            ViewBag.groupeset = model.ViewGroups(model.PeriodGroups);
             return View("СhoiceTimetable");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> СhangeTimetable(TimetableSortState sortOrder = TimetableSortState.DateAsc)
+        {
+            IQueryable<NewTimetable> newtimetables = NewTimetable();
+
+            ViewData["DateSort"] = sortOrder == TimetableSortState.DateAsc ? TimetableSortState.DateDesc : TimetableSortState.DateAsc;
+            ViewData["CourseSort"] = sortOrder == TimetableSortState.CourseAsc ? TimetableSortState.CourseDesc : TimetableSortState.CourseAsc;
+            ViewData["NumberGroupSort"] = sortOrder == TimetableSortState.NumberGroupAsc ? TimetableSortState.NumberGroupDesc : TimetableSortState.NumberGroupAsc;
+            ViewData["FIOteacherSort"] = sortOrder == TimetableSortState.FIOteacherAsc ? TimetableSortState.FIOteacherDesc : TimetableSortState.FIOteacherAsc;
+            ViewData["NameLessonSort"] = sortOrder == TimetableSortState.NameLessonAsc ? TimetableSortState.NameLessonDesc : TimetableSortState.NameLessonAsc;
+            ViewData["NumberClassSort"] = sortOrder == TimetableSortState.NumberClassAsc ? TimetableSortState.NumberClassDesc : TimetableSortState.NumberClassAsc;
+
+            newtimetables = sortOrder switch
+            {
+                TimetableSortState.DateDesc => newtimetables.OrderByDescending(s => s.Date),
+                TimetableSortState.CourseAsc => newtimetables.OrderBy(s => s.Course),
+                TimetableSortState.CourseDesc => newtimetables.OrderByDescending(s => s.Course),
+                TimetableSortState.NumberGroupAsc => newtimetables.OrderBy(s => s.NumberGroup),
+                TimetableSortState.NumberGroupDesc => newtimetables.OrderByDescending(s => s.NumberGroup),
+                TimetableSortState.FIOteacherAsc => newtimetables.OrderBy(s => s.FIOteacher),
+                TimetableSortState.FIOteacherDesc => newtimetables.OrderByDescending(s => s.FIOteacher),
+                TimetableSortState.NameLessonAsc => newtimetables.OrderBy(s => s.NameLesson),
+                TimetableSortState.NameLessonDesc => newtimetables.OrderByDescending(s => s.NameLesson),
+                TimetableSortState.NumberClassAsc => newtimetables.OrderBy(s => s.NumberClass),
+                TimetableSortState.NumberClassDesc => newtimetables.OrderByDescending(s => s.NumberClass),
+                _ => newtimetables.OrderBy(s => s.Date),
+            };
+
+            return View(await newtimetables.AsNoTracking().ToListAsync());
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateTimetable(TimetableU timetable)
+        {
+            ttdb.Timetables.Add(timetable);
+            await ttdb.SaveChangesAsync();
+            return RedirectToAction("СhangeTimetable");
+        }
+
+        public async Task<IActionResult> DetailsTimetable(int? id)
+        {
+            if (id != null)
+            {
+                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
+                if (timetable != null)
+                    return View(timetable);
+            }
+            return NotFound();
+        }
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> EditTimetable(int? id)
+        {
+            if (id != null)
+            {
+                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
+                if (timetable != null)
+                    return View(timetable);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> EditTimetable(TimetableU timetable)
+        {
+            ttdb.Timetables.Update(timetable);
+            await ttdb.SaveChangesAsync();
+            return RedirectToAction("СhangeTimetable");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [ActionName("DeleteTimetable")]
+        public async Task<IActionResult> ConfirmDelete(int? id)
+        {
+            if (id != null)
+            {
+                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
+                if (timetable != null)
+                    return View(timetable);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteTimetable(int? id)
+        {
+            if (id != null)
+            {
+                TimetableU timetable = new TimetableU { Id_Date = id.Value };
+                ttdb.Entry(timetable).State = EntityState.Deleted;
+                await ttdb.SaveChangesAsync();
+                return RedirectToAction("СhangeTimetable");
+            }
+            return NotFound();
         }
     }
 }

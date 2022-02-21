@@ -1,0 +1,33 @@
+﻿@model Timetable.Models.TimetableU
+    @{
+        ViewBag.Title = "Добавление в расписание";
+    }
+<form asp-action="CreateTeacher" asp-controller="Timetable">
+    <div class="form-group">
+        <label asp-for="Date" class="control-label">Дата</label>
+        <input type="DateTime" asp-for="Date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Id_Lesson" class="control-label">Идентификатор предмета</label>
+        <input type="Number" asp-for="Id_Lesson" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Id_Class" class="control-label">Идентификатор аудитоии</label>
+        <input type="Number" asp-for="Id_Class" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Id_Teacher" class="control-label">Идентификатор преподавателя</label>
+        <input type="Number" asp-for="Id_Teacher" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Id_User" class="control-label">Идентификатор пользователя</label>
+        <input type="Number" asp-for="Id_User" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Id_Group" class="control-label">Идентификатор группы</label>
+        <input type="Number" asp-for="Id_Group" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Отправить" class="btn btn-default" />
+    </div>
+</form>

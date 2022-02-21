@@ -1,0 +1,26 @@
+﻿@model Timetable.Models.TimetableU
+@{
+    ViewBag.Title = Model.Date;
+}
+<h2>Дата и время пары @Model.Date</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор пары</dt>
+        <dd>@Model.Id_Date</dd>
+
+        <dt>Id предмета</dt>
+        <dd>@Model.Id_Lesson</dd>
+
+        <dt>Id аудитории</dt>
+        <dd>@Model.Id_Class</dd>
+
+        <dt>Id преподавателя</dt>
+        <dd>@Model.Id_Teacher</dd>
+
+        <dt>Id пользователя</dt>
+        <dd>@Model.Id_User</dd>
+
+        <dt>Id группы</dt>
+        <dd>@Model.Id_Group</dd>
+    </dl>
+</div>

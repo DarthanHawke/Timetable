@@ -9,7 +9,7 @@
         <table class="table">
             <tr>
                 <th>
-                    <a asp-action="Classroom" asp-route-sortOrder="@ViewBag.Id_ClassSort">
+                    <a asp-action="Classroom" asp-route-sortOrder="@ViewBag.NumberClassSort">
                         Номер
                     </a>
                 </th>
@@ -27,7 +27,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Id_Class</td>
+                    <td>@item.NumberClass</td>
                     <td>@item.TypeClass</td>
                     <td>@item.Capacity</td>
                     <td>

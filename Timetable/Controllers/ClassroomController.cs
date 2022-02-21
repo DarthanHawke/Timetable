@@ -17,22 +17,22 @@ namespace Timetable.Controllers
             cdb = context;
         }
 
-        public async Task<IActionResult> Classroom(ClassroomSortState sortOrder = ClassroomSortState.Id_ClassAsc)
+        public async Task<IActionResult> Classroom(ClassroomSortState sortOrder = ClassroomSortState.NumberClassAsc)
         {
             IQueryable<Classroom> classroom = cdb.Classrooms;
 
-            ViewData["Id_ClassSort"] = sortOrder == ClassroomSortState.Id_ClassAsc ? ClassroomSortState.Id_ClassDesc : ClassroomSortState.Id_ClassAsc;
+            ViewData["NumberClassSort"] = sortOrder == ClassroomSortState.NumberClassAsc ? ClassroomSortState.NumberClassDesc : ClassroomSortState.NumberClassAsc;
             ViewData["TypeClassSort"] = sortOrder == ClassroomSortState.TypeClassAsc ? ClassroomSortState.TypeClassDesc : ClassroomSortState.TypeClassAsc;
             ViewData["CapacitySort"] = sortOrder == ClassroomSortState.CapacityAsc ? ClassroomSortState.CapacityDesc : ClassroomSortState.CapacityAsc;
 
             classroom = sortOrder switch
             {
-                ClassroomSortState.Id_ClassDesc => classroom.OrderByDescending(s => s.Id_Class),
+                ClassroomSortState.NumberClassDesc => classroom.OrderByDescending(s => s.NumberClass),
                 ClassroomSortState.TypeClassAsc => classroom.OrderBy(s => s.TypeClass),
                 ClassroomSortState.TypeClassDesc => classroom.OrderByDescending(s => s.TypeClass),
                 ClassroomSortState.CapacityAsc => classroom.OrderBy(s => s.Capacity),
                 ClassroomSortState.CapacityDesc => classroom.OrderByDescending(s => s.Capacity),
-                _ => classroom.OrderBy(s => s.Id_Class),
+                _ => classroom.OrderBy(s => s.NumberClass),
             };
             return View(await classroom.AsNoTracking().ToListAsync());
         }

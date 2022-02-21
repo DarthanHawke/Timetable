@@ -5,6 +5,10 @@
 
 <div>
     <dl class="dl-horizontal">
+        <dt>>Номер аудитории</dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberClass)
+        </dd>
         <dt>Тип</dt>
         <dd>
             @Html.DisplayFor(model => model.TypeClass)
@@ -23,11 +27,6 @@
         <dt>Доска</dt>
         <dd>
             @Html.DisplayFor(model => model.Board)
-        </dd>
-
-        <dt>Инвентарь</dt>
-        <dd>
-            @Html.DisplayFor(model => model.Equipment)
         </dd>
     </dl>
 

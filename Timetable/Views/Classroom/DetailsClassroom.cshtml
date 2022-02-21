@@ -1,10 +1,13 @@
 ﻿@model Timetable.Models.Classroom
 @{
-    ViewBag.Title = Model.Id_Class;
+    ViewBag.Title = Model.NumberClass;
 }
-<h2>Номер аудитории @Model.Id_Class</h2>
+<h2>Номер аудитории @Model.NumberClass</h2>
 <div>
     <dl class="dl-horizontal">
+        <dt>Индентификатор аудитории</dt>
+        <dd>@Model.Id_Class</dd>
+
         <dt>Тип аудитории</dt>
         <dd>@Model.TypeClass</dd>
 
@@ -16,8 +19,5 @@
 
         <dt>Наличие доски</dt>
         <dd>@Model.Board</dd>
-
-        <dt>Дополнительный инвентарь</dt>
-        <dd>@Model.Equipment</dd>
     </dl>
 </div>

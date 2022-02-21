@@ -4,8 +4,8 @@
 }
 <form asp-action="EditClassroom" asp-controller="Classroom" asp-route-Id_Class="@Model.Id_Class">
     <div class="form-group">
-        <label asp-for="Id_Class" class="control-label">Номер аудитории</label>
-        <input type="number" asp-for="Id_Class" class="form-control" />
+        <label asp-for="NumberClass" class="control-label">Номер аудитории</label>
+        <input type="number" asp-for="NumberClass" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="TypeClass" class="control-label">Тип аудитории</label>
@@ -22,10 +22,6 @@
     <div class="form-group">
         <label asp-for="Board" class="control-label">Доска</label>
         <input type="number" asp-for="Board" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Equipment" class="control-label">Дополнительный инвентарь</label>
-        <input type="number" asp-for="Equipment" class="form-control" />
     </div>
     <div class="form-group">
         <input type="submit" value="Сохранить" class="btn btn-default" />

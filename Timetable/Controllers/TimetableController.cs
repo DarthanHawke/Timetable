@@ -29,29 +29,31 @@ namespace Timetable.Controllers
         [HttpPost]
         public IActionResult Timetable(СhoiceViewModel model)
         {
-            string[] weekday = new string[6] { "20210221T", "20210222T", "20210223T", "20210224T", "20210225T", "20210226T" };
-            string[] time = new string[8] { "08:00:00Z", "09:45:00Z", "11:30:00Z", "13:25:00Z", "15:10:00Z", "16:55:00Z", "18:40:00Z", "20:10:00Z" };
+            string[] weekday = new string[6] { "2022-02-21T", "2022-02-22T", "2022-02-23T", "2022-02-24T", "2022-02-25T", "2022-02-26T" };
+            string[] time = new string[8] { "08:00:00", "09:45:00", "11:30:00", "13:25:00", "15:10:00", "16:55:00", "18:40:00", "20:10:00" };
 
 
-            var courseset = model.PeriodCourses.ToString();
-            var groupeset = model.PeriodGroups.ToString();
+            var courseset = model.ViewCourses(model.PeriodCourses);
+            var groupeset = model.ViewGroups(model.PeriodGroups);
 
 
             var timetable = ttdb.Groups.Where(p => p.Course.ToString() == courseset)
-                .Union(ttdb.Groups.Where(p => p.NumberGroup.ToString() == groupeset));
+                .Where(p => p.NumberGroup.ToString() == groupeset).Select(p => p.Id_Group).ToArray()[0];
+
+            var pairtb = ttdb.Timetables.Where(p => p.Id_Group == timetable);
+
+
             Teacher[,] teachers = new Teacher[6, 8];
             LessonU[,] lessons = new LessonU[6, 8];
             Classroom[,] classrooms = new Classroom[6, 8];
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-
-
             for (var i = 0; i < 6; ++i)
             {
                 for (var j = 0; j < 8; ++j)
                 {
-                    DateTime pairdate = DateTime.ParseExact(weekday[i] + time[j], "yyyyMMddTHH:mm:ssZ", provider);
-                    var pair = ttdb.Timetables.FirstOrDefault(p => p.Date == pairdate);
+                    DateTime pairdate = DateTime.ParseExact(weekday[i] + time[j], "yyyy-MM-ddTHH:mm:ss", provider);
+                    var pair = pairtb.FirstOrDefault(p => p.Date == pairdate);
                     if (pair != null)
                     {
                         teachers[i, j] = ttdb.Teachers.FirstOrDefault(p => p.Id_Teacher == pair.Id_Teacher);
@@ -81,8 +83,8 @@ namespace Timetable.Controllers
                     ViewBag.classrooms[i, j] = classrooms[i, j].NumberClass;
                 }
             }
-            ViewBag.courseset = model.PeriodCourses.ToString();
-            ViewBag.groupeset = model.PeriodGroups.ToString();
+            ViewBag.courseset = model.ViewCourses(model.PeriodCourses);
+            ViewBag.groupeset = model.ViewGroups(model.PeriodGroups);
             return View("СhoiceTimetable");
         }
     }

@@ -37,12 +37,14 @@ namespace Timetable.Controllers
             return View(await classroom.AsNoTracking().ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateClassroom()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateClassroom(Classroom classroom)
         {
             cdb.Classrooms.Add(classroom);
@@ -61,6 +63,7 @@ namespace Timetable.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditClassroom(int? id)
         {
             if (id != null)
@@ -73,6 +76,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditClassroom(Classroom classroom)
         {
             cdb.Classrooms.Update(classroom);
@@ -81,6 +85,7 @@ namespace Timetable.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ActionName("DeleteClassroom")]
         public async Task<IActionResult> ConfirmDelete(int? id)
         {
@@ -94,6 +99,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteClassroom(int? id)
         {
             if (id != null)

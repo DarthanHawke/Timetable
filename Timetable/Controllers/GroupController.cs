@@ -37,12 +37,14 @@ namespace Timetable.Controllers
             return View(await group.AsNoTracking().ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateGroup()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateGroup(GroupU group)
         {
             gdb.Groups.Add(group);
@@ -61,6 +63,7 @@ namespace Timetable.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditGroup(int? id)
         {
             if (id != null)
@@ -73,6 +76,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditGroup(GroupU group)
         {
             gdb.Groups.Update(group);
@@ -81,6 +85,7 @@ namespace Timetable.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ActionName("DeleteGroup")]
         public async Task<IActionResult> ConfirmDelete(int? id)
         {
@@ -94,6 +99,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteGroup(int? id)
         {
             if (id != null)

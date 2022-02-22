@@ -40,12 +40,14 @@ namespace Timetable.Controllers
             return View(await teacher.AsNoTracking().ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateTeacher()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTeacher(Teacher teacher)
         {
             tdb.Teachers.Add(teacher);
@@ -64,6 +66,7 @@ namespace Timetable.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditTeacher(int? id)
         {
             if (id != null)
@@ -76,6 +79,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditTeacher(Teacher teacher)
         {
             tdb.Teachers.Update(teacher);
@@ -84,6 +88,7 @@ namespace Timetable.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ActionName("DeleteTeacher")]
         public async Task<IActionResult> ConfirmDelete(int? id)
         {
@@ -97,6 +102,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTeacher(int? id)
         {
             if (id != null)

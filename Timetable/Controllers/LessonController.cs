@@ -33,12 +33,14 @@ namespace Timetable.Controllers
             return View(await lesson.AsNoTracking().ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateLesson()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateLesson(LessonU lesson)
         {
             ldb.Lessons.Add(lesson);
@@ -57,6 +59,7 @@ namespace Timetable.Controllers
             return NotFound();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditLesson(int? id)
         {
             if (id != null)
@@ -69,6 +72,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditLesson(LessonU lesson)
         {
             ldb.Lessons.Update(lesson);
@@ -77,6 +81,7 @@ namespace Timetable.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ActionName("DeleteLesson")]
         public async Task<IActionResult> ConfirmDelete(int? id)
         {
@@ -90,6 +95,7 @@ namespace Timetable.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteLesson(int? id)
         {
             if (id != null)

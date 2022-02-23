@@ -14,7 +14,6 @@ namespace Timetable.Models
         public int Id_Lesson { get; set; } //id предмета
         public int Id_Class { get; set; } //id аудитории
         public int Id_Teacher { get; set; } //id преподавателя
-        public int Id_User { get; set; } //id пользователя
         public int Id_Group { get; set; } //id группы
     }
 

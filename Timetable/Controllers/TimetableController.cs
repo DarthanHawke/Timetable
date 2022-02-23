@@ -31,6 +31,7 @@ namespace Timetable.Controllers
                                                      join classrooms in ttdb.Classrooms on timetable.Id_Class equals classrooms.Id_Class
                                                      select new NewTimetable
                                                      {
+                                                         Id_Date = timetable.Id_Date,
                                                          Week = timetable.Week,
                                                          Time = timetable.Time,
                                                          Integrity = timetable.Integrity,
@@ -65,7 +66,7 @@ namespace Timetable.Controllers
                 .Where(p => p.NumberGroup.ToString() == groupeset);
 
             IQueryable <NewTimetable> pairday = null;
-            IQueryable<NewTimetable> pairtime = null;
+            IQueryable <NewTimetable> pairtime = null;
             NewTimetable[,,] pair = new NewTimetable[6,8,3];
 
             for (var i = 0; i < 6; ++i)
@@ -152,24 +153,47 @@ namespace Timetable.Controllers
             return View(await newtimetables.AsNoTracking().ToListAsync());
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateTimetable()
+        {
+            return View();
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateTimetable(TimetableU timetable)
+        public async Task<IActionResult> CreateTimetable(NewTimetable newtimetables)
         {
+            var id_lesson = ttdb.Lessons.FirstOrDefault(p => p.Name == newtimetables.NameLesson).Id_Lesson;
+            var id_class = ttdb.Classrooms.FirstOrDefault(p => p.NumberClass == newtimetables.NumberClass).Id_Class;
+            var id_teacher = ttdb.Teachers.FirstOrDefault(p => p.FIO == newtimetables.FIOteacher).Id_Teacher;
+            var id_group = ttdb.Groups.Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .FirstOrDefault(p => p.NumberGroup == newtimetables.NumberGroup).Id_Group;
+
+            TimetableU timetable = new TimetableU
+            {
+                Week = newtimetables.Week,
+                Time = newtimetables.Time,
+                Integrity = newtimetables.Integrity,
+                Id_Lesson = id_lesson,
+                Id_Class = id_class,
+                Id_Teacher = id_teacher,
+                Id_Group = id_group
+            };
             ttdb.Timetables.Add(timetable);
             await ttdb.SaveChangesAsync();
             return RedirectToAction("СhangeTimetable");
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DetailsTimetable(NewTimetable newtimetables)
+        public async Task<IActionResult> DetailsTimetable(int? id)
         {
-            int? id = newtimetables.Id_Date;
             if (id != null)
             {
-                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
-                if (timetable != null)
-                    return View(timetable);
+                IQueryable<NewTimetable> newtimetables = NewTimetable();
+                var newtimetable = await newtimetables.FirstOrDefaultAsync(p => p.Id_Date == id);
+                if (newtimetable != null)
+                    return View(newtimetable);
             }
             return NotFound();
         }
@@ -179,17 +203,35 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
-                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
-                if (timetable != null)
-                    return View(timetable);
+                IQueryable<NewTimetable> newtimetables = NewTimetable();
+                var newtimetable = await newtimetables.FirstOrDefaultAsync(p => p.Id_Date == id);
+                if (newtimetable != null)
+                    return View(newtimetable);
             }
             return NotFound();
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> EditTimetable(TimetableU timetable)
+        public async Task<IActionResult> EditTimetable(NewTimetable newtimetables)
         {
+            var id_lesson = ttdb.Lessons.FirstOrDefault(p => p.Name == newtimetables.NameLesson).Id_Lesson;
+            var id_class = ttdb.Classrooms.FirstOrDefault(p => p.NumberClass == newtimetables.NumberClass).Id_Class;
+            var id_teacher = ttdb.Teachers.FirstOrDefault(p => p.FIO == newtimetables.FIOteacher).Id_Teacher;
+            var id_group = ttdb.Groups.Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .FirstOrDefault(p => p.NumberGroup == newtimetables.NumberGroup).Id_Group;
+
+            TimetableU timetable = new TimetableU
+            {
+                Week = newtimetables.Week,
+                Time = newtimetables.Time,
+                Integrity = newtimetables.Integrity,
+                Id_Lesson = id_lesson,
+                Id_Class = id_class,
+                Id_Teacher = id_teacher,
+                Id_Group = id_group
+            };
             ttdb.Timetables.Update(timetable);
             await ttdb.SaveChangesAsync();
             return RedirectToAction("СhangeTimetable");
@@ -202,9 +244,10 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
-                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
-                if (timetable != null)
-                    return View(timetable);
+                IQueryable<NewTimetable> newtimetables = NewTimetable();
+                var newtimetable = await newtimetables.FirstOrDefaultAsync(p => p.Id_Date == id);
+                if (newtimetable != null)
+                    return View(newtimetable);
             }
             return NotFound();
         }
@@ -215,7 +258,7 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
-                TimetableU timetable = new TimetableU { Id_Date = id.Value };
+                TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
                 ttdb.Entry(timetable).State = EntityState.Deleted;
                 await ttdb.SaveChangesAsync();
                 return RedirectToAction("СhangeTimetable");

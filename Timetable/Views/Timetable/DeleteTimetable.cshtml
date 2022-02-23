@@ -1,36 +1,53 @@
-﻿@model Timetable.Models.TimetableU
+﻿@model Timetable.Models.NewTimetable
 @{
     ViewBag.Title = "Удаление преподавателя";
 }
 
 <div>
     <dl class="dl-horizontal">
-        <dt>Id пары</dt>
+        <dt>Идентификатор пары</dt>
         <dd>
             @Html.DisplayFor(model => model.Id_Date)
         </dd>
 
-        <dt>Id предмета</dt>
+        <dt>День недели</dt>
         <dd>
-            @Html.DisplayFor(model => model.Id_Lesson)
+            @Html.DisplayFor(model => model.Week)
         </dd>
 
-        <dt>Id аудитории</dt>
+        <dt>Время</dt>
         <dd>
-            @Html.DisplayFor(model => model.Id_Class)
+            @Html.DisplayFor(model => model.Time)
         </dd>
 
-        <dt>Id преподавателя</dt>
+        <dt>Целостность</dt>
         <dd>
-            @Html.DisplayFor(model => model.Id_Teacher)
+            @Html.DisplayFor(model => model.Integrity)
         </dd>
-        <dt>Id пользователя</dt>
+
+        <dt>Курс</dt>
         <dd>
-            @Html.DisplayFor(model => model.Id_User)
+            @Html.DisplayFor(model => model.Course)
         </dd>
-        <dt>Id группы</dt>
+
+        <dt>Группа</dt>
         <dd>
-            @Html.DisplayFor(model => model.Id_Group)
+            @Html.DisplayFor(model => model.NumberGroup)
+        </dd>
+
+        <dt>Преподаватель</dt>
+        <dd>
+            @Html.DisplayFor(model => model.FIOteacher)
+        </dd>
+
+        <dt>Пара</dt>
+        <dd>
+            @Html.DisplayFor(model => model.NameLesson)
+        </dd>
+
+        <dt>Аудитория</dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumberClass)
         </dd>
     </dl>
 

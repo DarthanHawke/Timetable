@@ -1,8 +1,8 @@
-﻿@model Timetable.Models.TimetableU
+﻿@model Timetable.Models.NewTimetable
 @{
     ViewBag.Title = Model.Id_Date;
 }
-<h2>Дата и время пары @Model.Id_Date</h2>
+<h2>Идентификатор пары @Model.Id_Date</h2>
 <div>
     <dl class="dl-horizontal">
         <dt>День недели</dt>
@@ -11,19 +11,22 @@
         <dt>Время</dt>
         <dd>@Model.Time</dd>
 
-        <dt>Id предмета</dt>
-        <dd>@Model.Id_Lesson</dd>
+        <dt>Целостность</dt>
+        <dd>@Model.Integrity</dd>
 
-        <dt>Id аудитории</dt>
-        <dd>@Model.Id_Class</dd>
+        <dt>Курс</dt>
+        <dd>@Model.Course</dd>
 
-        <dt>Id преподавателя</dt>
-        <dd>@Model.Id_Teacher</dd>
+        <dt>Группа</dt>
+        <dd>@Model.NumberGroup</dd>
 
-        <dt>Id пользователя</dt>
-        <dd>@Model.Id_User</dd>
+        <dt>Преподаватель</dt>
+        <dd>@Model.FIOteacher</dd>
 
-        <dt>Id группы</dt>
-        <dd>@Model.Id_Group</dd>
+        <dt>Пара</dt>
+        <dd>@Model.NameLesson</dd>
+
+        <dt>Аудитория</dt>
+        <dd>@Model.NumberClass</dd>
     </dl>
 </div>

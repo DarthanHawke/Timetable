@@ -12,8 +12,13 @@
         <table class="table">
             <tr>
                 <th>
-                    <a asp-action="СhangeTimetable" asp-route-sortOrder="@ViewBag.DateSort">
-                        Дата
+                    <a asp-action="СhangeTimetable" asp-route-sortOrder="@ViewBag.WeekSort">
+                        Неделя
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="СhangeTimetable" asp-route-sortOrder="@ViewBag.TimeSort">
+                        Время
                     </a>
                 </th>
                 <th>
@@ -45,7 +50,8 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Date</td>
+                    <td>@item.Week</td>
+                    <td>@item.Time</td>
                     <td>@item.Course</td>
                     <td>@item.NumberGroup</td>
                     <td>@item.FIOteacher</td>

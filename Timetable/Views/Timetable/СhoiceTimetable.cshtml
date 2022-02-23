@@ -12,7 +12,7 @@
     <div><a asp-action="СhangeTimetable" asp-controller="Timetable">Изменить расписание</a></div>
 }
 
-<table class="table">
+<table class="table" border="1" align="center">
     <tr>
         <th>Время</th>
         <th>Понедельник</th>
@@ -22,76 +22,45 @@
         <th>Пятница</th>
         <th>Суббота</th>
     </tr>
-    <tr>
-        <td>08:00 - 09:35</td>
-        <td>@ViewBag.lessons[0, 0] @ViewBag.classrooms[0, 0] @ViewBag.teachers[0, 0]</td>
-        <td>@ViewBag.lessons[1, 0] @ViewBag.classrooms[1, 0] @ViewBag.teachers[1, 0]</td>
-        <td>@ViewBag.lessons[2, 0] @ViewBag.classrooms[2, 0] @ViewBag.teachers[2, 0]</td>
-        <td>@ViewBag.lessons[3, 0] @ViewBag.classrooms[3, 0] @ViewBag.teachers[3, 0]</td>
-        <td>@ViewBag.lessons[4, 0] @ViewBag.classrooms[4, 0] @ViewBag.teachers[4, 0]</td>
-        <td>@ViewBag.lessons[5, 0] @ViewBag.classrooms[5, 0] @ViewBag.teachers[5, 0]</td>
-    </tr>
-    <tr>
-        <td>09:45 - 11:20</td>
-        <td>@ViewBag.lessons[0, 1] @ViewBag.classrooms[0, 1] @ViewBag.teachers[0, 1]</td>
-        <td>@ViewBag.lessons[1, 1] @ViewBag.classrooms[1, 1] @ViewBag.teachers[1, 1]</td>
-        <td>@ViewBag.lessons[2, 1] @ViewBag.classrooms[2, 1] @ViewBag.teachers[2, 1]</td>
-        <td>@ViewBag.lessons[3, 1] @ViewBag.classrooms[3, 1] @ViewBag.teachers[3, 1]</td>
-        <td>@ViewBag.lessons[4, 1] @ViewBag.classrooms[4, 1] @ViewBag.teachers[4, 1]</td>
-        <td>@ViewBag.lessons[5, 1] @ViewBag.classrooms[5, 1] @ViewBag.teachers[5, 1]</td>
-    </tr>
-    <tr>
-        <td>11:30 - 13:05</td>
-        <td>@ViewBag.lessons[0, 2] @ViewBag.classrooms[0, 2] @ViewBag.teachers[0, 2]</td>
-        <td>@ViewBag.lessons[1, 2] @ViewBag.classrooms[1, 2] @ViewBag.teachers[1, 2]</td>
-        <td>@ViewBag.lessons[2, 2] @ViewBag.classrooms[2, 2] @ViewBag.teachers[2, 2]</td>
-        <td>@ViewBag.lessons[3, 2] @ViewBag.classrooms[3, 2] @ViewBag.teachers[3, 2]</td>
-        <td>@ViewBag.lessons[4, 2] @ViewBag.classrooms[4, 2] @ViewBag.teachers[4, 2]</td>
-        <td>@ViewBag.lessons[5, 2] @ViewBag.classrooms[5, 2] @ViewBag.teachers[5, 2]</td>
-    </tr>
-    <tr>
-        <td>13:25 - 15:00</td>
-        <td>@ViewBag.lessons[0, 3] @ViewBag.classrooms[0, 3] @ViewBag.teachers[0, 3]</td>
-        <td>@ViewBag.lessons[1, 3] @ViewBag.classrooms[1, 3] @ViewBag.teachers[1, 3]</td>
-        <td>@ViewBag.lessons[2, 3] @ViewBag.classrooms[2, 3] @ViewBag.teachers[2, 3]</td>
-        <td>@ViewBag.lessons[3, 3] @ViewBag.classrooms[3, 3] @ViewBag.teachers[3, 3]</td>
-        <td>@ViewBag.lessons[4, 3] @ViewBag.classrooms[4, 3] @ViewBag.teachers[4, 3]</td>
-        <td>@ViewBag.lessons[5, 3] @ViewBag.classrooms[5, 3] @ViewBag.teachers[5, 3]</td>
-    </tr>
-    <tr>
-        <td>15:10 - 16:45</td>
-        <td>@ViewBag.lessons[0, 4] @ViewBag.classrooms[0, 4] @ViewBag.teachers[0, 4]</td>
-        <td>@ViewBag.lessons[1, 4] @ViewBag.classrooms[1, 4] @ViewBag.teachers[1, 4]</td>
-        <td>@ViewBag.lessons[2, 4] @ViewBag.classrooms[2, 4] @ViewBag.teachers[2, 4]</td>
-        <td>@ViewBag.lessons[3, 4] @ViewBag.classrooms[3, 4] @ViewBag.teachers[3, 4]</td>
-        <td>@ViewBag.lessons[4, 4] @ViewBag.classrooms[4, 4] @ViewBag.teachers[4, 4]</td>
-        <td>@ViewBag.lessons[5, 4] @ViewBag.classrooms[5, 4] @ViewBag.teachers[5, 4]</td>
-    </tr>
-    <tr>
-        <td>16:55 - 18:30</td>
-        <td>@ViewBag.lessons[0, 5] @ViewBag.classrooms[0, 5] @ViewBag.teachers[0, 5]</td>
-        <td>@ViewBag.lessons[1, 5] @ViewBag.classrooms[1, 5] @ViewBag.teachers[1, 5]</td>
-        <td>@ViewBag.lessons[2, 5] @ViewBag.classrooms[2, 5] @ViewBag.teachers[2, 5]</td>
-        <td>@ViewBag.lessons[3, 5] @ViewBag.classrooms[3, 5] @ViewBag.teachers[3, 5]</td>
-        <td>@ViewBag.lessons[4, 5] @ViewBag.classrooms[4, 5] @ViewBag.teachers[4, 5]</td>
-        <td>@ViewBag.lessons[5, 5] @ViewBag.classrooms[5, 5] @ViewBag.teachers[5, 5]</td>
-    </tr>
-    <tr>
-        <td>18:40 - 20:00</td>
-        <td>@ViewBag.lessons[0, 6] @ViewBag.classrooms[0, 6] @ViewBag.teachers[0, 6]</td>
-        <td>@ViewBag.lessons[1, 6] @ViewBag.classrooms[1, 6] @ViewBag.teachers[1, 6]</td>
-        <td>@ViewBag.lessons[2, 6] @ViewBag.classrooms[2, 6] @ViewBag.teachers[2, 6]</td>
-        <td>@ViewBag.lessons[3, 6] @ViewBag.classrooms[3, 6] @ViewBag.teachers[3, 6]</td>
-        <td>@ViewBag.lessons[4, 6] @ViewBag.classrooms[4, 6] @ViewBag.teachers[4, 6]</td>
-        <td>@ViewBag.lessons[5, 6] @ViewBag.classrooms[5, 6] @ViewBag.teachers[5, 6]</td>
-    </tr>
-    <tr>
-        <td>20:10 - 21:45</td>
-        <td>@ViewBag.lessons[0, 7] @ViewBag.classrooms[0, 7] @ViewBag.teachers[0, 7]</td>
-        <td>@ViewBag.lessons[1, 7] @ViewBag.classrooms[1, 7] @ViewBag.teachers[1, 7]</td>
-        <td>@ViewBag.lessons[2, 7] @ViewBag.classrooms[2, 7] @ViewBag.teachers[2, 7]</td>
-        <td>@ViewBag.lessons[3, 7] @ViewBag.classrooms[3, 7] @ViewBag.teachers[3, 7]</td>
-        <td>@ViewBag.lessons[4, 7] @ViewBag.classrooms[4, 7] @ViewBag.teachers[4, 7]</td>
-        <td>@ViewBag.lessons[5, 7] @ViewBag.classrooms[5, 7] @ViewBag.teachers[5, 7]</td>
-    </tr>
+    @for (int y = 0; y < 8; ++y)
+    {
+        <tr><th rowspan="2">@ViewBag.time[y]</th>
+            @for (int x = 0; x < 6; ++x)
+            {
+                @if (@ViewBag.pair[x, y, 1].Integrity.Replace(" ", "") == "Числитель" && @ViewBag.pair[x, y, 2].Integrity.Replace(" ", "") == "Знаменатель")
+                {
+                    <td>@ViewBag.pair[x, y, 1].NameLesson @ViewBag.pair[x, y, 1].NumberClass @ViewBag.pair[x, y, 1].FIOteacher</td>
+                }
+                else if (@ViewBag.pair[x, y, 1].Integrity.Replace(" ", "") == "Числитель")
+                {
+                    <td>@ViewBag.pair[x, y, 1].NameLesson @ViewBag.pair[x, y, 1].NumberClass @ViewBag.pair[x, y, 1].FIOteacher</td>
+                }
+                else if (@ViewBag.pair[x, y, 2].Integrity.Replace(" ", "") == "Знаменатель")
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td rowspan="2">@ViewBag.pair[x, y, 0].NameLesson @ViewBag.pair[x, y, 0].NumberClass @ViewBag.pair[x, y, 0].FIOteacher</td>
+                }
+            }
+        </tr>
+        <tr>
+            @for (int x = 0; x < 6; ++x)
+            {
+                @if (@ViewBag.pair[x, y, 1].Integrity.Replace(" ", "") == "Числитель" && @ViewBag.pair[x, y, 2].Integrity.Replace(" ", "") == "Знаменатель")
+                {
+                    <td>@ViewBag.pair[x, y, 2].NameLesson @ViewBag.pair[x, y, 2].NumberClass @ViewBag.pair[x, y, 2].FIOteacher</td>
+                }
+                else if (@ViewBag.pair[x, y, 1].Integrity.Replace(" ", "") == "Числитель")
+                {
+                    <td></td>
+                }
+                else if (@ViewBag.pair[x, y, 2].Integrity.Replace(" ", "") == "Знаменатель")
+                {
+                    <td>@ViewBag.pair[x, y, 2].NameLesson @ViewBag.pair[x, y, 2].NumberClass @ViewBag.pair[x, y, 2].FIOteacher</td>
+                }
+             }
+        </tr>
+     }
 </table>

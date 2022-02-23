@@ -31,7 +31,9 @@ namespace Timetable.Controllers
                                                      join classrooms in ttdb.Classrooms on timetable.Id_Class equals classrooms.Id_Class
                                                      select new NewTimetable
                                                      {
-                                                         Date = timetable.Date,
+                                                         Week = timetable.Week,
+                                                         Time = timetable.Time,
+                                                         Integrity = timetable.Integrity,
                                                          Course = groups.Course,
                                                          NumberGroup = groups.NumberGroup,
                                                          FIOteacher = teachers.FIO,
@@ -45,74 +47,84 @@ namespace Timetable.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult Timetable(СhoiceViewModel model)
         {
-            string[] weekday = new string[6] { "2022-02-21T", "2022-02-22T", "2022-02-23T", "2022-02-24T", "2022-02-25T", "2022-02-26T" };
-            string[] time = new string[8] { "08:00:00", "09:45:00", "11:30:00", "13:25:00", "15:10:00", "16:55:00", "18:40:00", "20:10:00" };
+            string[] weekday = new string[6] { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" };
+            string[] time = new string[8] { "08:00", "09:45", "11:30", "13:25", "15:10", "16:55", "18:40", "20:10" };
 
+            IQueryable<NewTimetable> newtimetables = NewTimetable();
 
             var courseset = model.ViewCourses(model.PeriodCourses);
+            ViewBag.courseset = courseset;
             var groupeset = model.ViewGroups(model.PeriodGroups);
+            ViewBag.groupeset = groupeset;
 
+            newtimetables = newtimetables.Where(p => p.Course.ToString() == courseset)
+                .Where(p => p.NumberGroup.ToString() == groupeset);
 
-            var timetable = ttdb.Groups.Where(p => p.Course.ToString() == courseset)
-                .Where(p => p.NumberGroup.ToString() == groupeset).Select(p => p.Id_Group).ToArray()[0];
-
-            var pairtb = ttdb.Timetables.Where(p => p.Id_Group == timetable);
-
-
-            Teacher[,] teachers = new Teacher[6, 8];
-            LessonU[,] lessons = new LessonU[6, 8];
-            Classroom[,] classrooms = new Classroom[6, 8];
-            CultureInfo provider = CultureInfo.InvariantCulture;
+            IQueryable <NewTimetable> pairday = null;
+            IQueryable<NewTimetable> pairtime = null;
+            NewTimetable[,,] pair = new NewTimetable[6,8,3];
 
             for (var i = 0; i < 6; ++i)
             {
+                pairday = newtimetables.Where(p => p.Week == weekday[i]);
                 for (var j = 0; j < 8; ++j)
                 {
-                    DateTime pairdate = DateTime.ParseExact(weekday[i] + time[j], "yyyy-MM-ddTHH:mm:ss", provider);
-                    var pair = pairtb.FirstOrDefault(p => p.Date == pairdate);
-                    if (pair != null)
+                    pairtime = pairday.Where(p => p.Time == time[j]);
+                    pair[i, j, 1] = pairtime.FirstOrDefault(p => p.Integrity == "Числитель");
+                    pair[i, j, 2] = pairtime.FirstOrDefault(p => p.Integrity == "Знаменатель");
+                    if (pair[i, j, 1] == null && pair[i, j, 2] == null)
                     {
-                        teachers[i, j] = ttdb.Teachers.FirstOrDefault(p => p.Id_Teacher == pair.Id_Teacher);
-                        lessons[i, j] = ttdb.Lessons.FirstOrDefault(p => p.Id_Lesson == pair.Id_Lesson);
-                        classrooms[i, j] = ttdb.Classrooms.FirstOrDefault(p => p.Id_Class == pair.Id_Class);
+                        pair[i, j, 0] = pairtime.FirstOrDefault();
+                        if (pair[i, j, 0] == null)
+                        {
+                            pair[i, j, 0] = new NewTimetable
+                            { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
+                        }
+                        pair[i, j, 1] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
+                        pair[i, j, 2] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
                     }
-                    else
+                    else if (pair[i, j, 1] == null)
                     {
-                        teachers[i, j] = new Teacher { FIO = "" };
-                        lessons[i, j] = new LessonU { Name = "" };
-                        classrooms[i, j] = new Classroom { NumberClass = "" };
+                        pair[i, j, 0] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
+                        pair[i, j, 1] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
+                    }
+                    else if (pair[i, j, 2] == null)
+                    {
+                        pair[i, j, 0] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
+                        pair[i, j, 2] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
+                    }
+                    else if (pair[i, j, 0] == null)
+                    {
+                        pair[i, j, 0] = new NewTimetable
+                        { Week = " ", Time = " ", Integrity = " ", Course = 0, NumberGroup = 0, FIOteacher = " ", NameLesson = " ", NumberClass = " " };
                     }
                 }
             }
 
-            ViewBag.teachers = new string[6,8];
-            ViewBag.lessons = new string[6, 8];
-            ViewBag.classrooms = new string[6, 8];
+            ViewBag.weekday = weekday;
+            ViewBag.time = time;
+            ViewBag.pair = pair;
 
-
-            for (var i = 0; i < 6; ++i)
-            {
-                for (var j = 0; j < 8; ++j)
-                {
-                    ViewBag.teachers[i, j] = teachers[i, j].FIO;
-                    ViewBag.lessons[i, j] = lessons[i, j].Name;
-                    ViewBag.classrooms[i, j] = classrooms[i, j].NumberClass;
-                }
-            }
-            ViewBag.courseset = model.ViewCourses(model.PeriodCourses);
-            ViewBag.groupeset = model.ViewGroups(model.PeriodGroups);
             return View("СhoiceTimetable");
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> СhangeTimetable(TimetableSortState sortOrder = TimetableSortState.DateAsc)
+        public async Task<IActionResult> СhangeTimetable(TimetableSortState sortOrder = TimetableSortState.WeekAsc)
         {
             IQueryable<NewTimetable> newtimetables = NewTimetable();
 
-            ViewData["DateSort"] = sortOrder == TimetableSortState.DateAsc ? TimetableSortState.DateDesc : TimetableSortState.DateAsc;
+            ViewData["WeekSort"] = sortOrder == TimetableSortState.WeekAsc ? TimetableSortState.WeekDesc : TimetableSortState.WeekAsc;
+            ViewData["DateSort"] = sortOrder == TimetableSortState.TimeAsc ? TimetableSortState.TimeDesc : TimetableSortState.TimeAsc;
             ViewData["CourseSort"] = sortOrder == TimetableSortState.CourseAsc ? TimetableSortState.CourseDesc : TimetableSortState.CourseAsc;
             ViewData["NumberGroupSort"] = sortOrder == TimetableSortState.NumberGroupAsc ? TimetableSortState.NumberGroupDesc : TimetableSortState.NumberGroupAsc;
             ViewData["FIOteacherSort"] = sortOrder == TimetableSortState.FIOteacherAsc ? TimetableSortState.FIOteacherDesc : TimetableSortState.FIOteacherAsc;
@@ -121,7 +133,9 @@ namespace Timetable.Controllers
 
             newtimetables = sortOrder switch
             {
-                TimetableSortState.DateDesc => newtimetables.OrderByDescending(s => s.Date),
+                TimetableSortState.WeekDesc => newtimetables.OrderByDescending(s => s.Week),
+                TimetableSortState.TimeAsc => newtimetables.OrderBy(s => s.Time),
+                TimetableSortState.TimeDesc => newtimetables.OrderByDescending(s => s.Time),
                 TimetableSortState.CourseAsc => newtimetables.OrderBy(s => s.Course),
                 TimetableSortState.CourseDesc => newtimetables.OrderByDescending(s => s.Course),
                 TimetableSortState.NumberGroupAsc => newtimetables.OrderBy(s => s.NumberGroup),
@@ -132,7 +146,7 @@ namespace Timetable.Controllers
                 TimetableSortState.NameLessonDesc => newtimetables.OrderByDescending(s => s.NameLesson),
                 TimetableSortState.NumberClassAsc => newtimetables.OrderBy(s => s.NumberClass),
                 TimetableSortState.NumberClassDesc => newtimetables.OrderByDescending(s => s.NumberClass),
-                _ => newtimetables.OrderBy(s => s.Date),
+                _ => newtimetables.OrderBy(s => s.Week),
             };
 
             return View(await newtimetables.AsNoTracking().ToListAsync());

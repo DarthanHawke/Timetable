@@ -21,18 +21,12 @@
                         Название
                     </a>
                 </th>
-                <th>
-                    <a asp-action="Lesson" asp-route-sortOrder="@ViewBag.CyclicalitySort">
-                        Цикличность
-                    </a>
-                </th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
                     <td>@item.TypeLesson</td>
                     <td>@item.Name</td>
-                    <td>@item.Cyclicality</td>
                     <td>
                         <a asp-action="DetailsLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Подробнее</a>
                         @if (ViewContext.HttpContext.User.IsInRole("Admin"))

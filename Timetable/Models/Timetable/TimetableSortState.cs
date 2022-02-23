@@ -1,7 +1,9 @@
 ﻿public enum TimetableSortState
 {
-    DateAsc,    // по ФИО по возрастанию
-    DateDesc,   // по ФИО по убыванию
+    WeekAsc,    // по ФИО по возрастанию
+    WeekDesc,   // по ФИО по убыванию
+    TimeAsc,    // по ФИО по возрастанию
+    TimeDesc,   // по ФИО по убыванию
     CourseAsc,    // по курсу по возрастанию
     CourseDesc,   // по курсу по убыванию
     NumberGroupAsc, // по номеру группы по возрастанию

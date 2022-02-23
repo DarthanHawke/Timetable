@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Timetable.Models.NewTimetable>
+
+
+    <h3>Вот что нашлось : </h3>
+    <form asp-action="Search" asp-controller="Timetable">
+        <div class="form-group" id="searchresults">
+            <table class="table">
+                <tr>
+                    <td>Дата</td>
+                    <td>Курс</td>
+                    <td>Группа</td>
+                    <td>Преподаватель</td>
+                    <td>Предмет</td>
+                    <td>Аудитория</td>
+                </tr>
+                @foreach (var item in Model)
+                {
+            <tr>
+                <td>@item.NumberClass</td>
+                <td>@item.Course</td>
+                <td>@item.NumberGroup</td>
+                <td>@item.FIOteacher</td>
+                <td>@item.NameLesson</td>
+                <td>
+                    <a asp-action="DetailsTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">Подробнее</a>
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="EditTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">| Изменить</a>
+                    }
+                    @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                    {
+                        <a asp-action="DeleteTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">| Удалить</a>
+                    }
+                </td>
+            </tr>
+                }
+            </table>
+        </div>
+    </form>

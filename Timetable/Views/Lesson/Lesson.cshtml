@@ -5,7 +5,10 @@
 
 <form asp-action="Lesson" asp-controller="Lesson">
     <div class="form-group">
-        <a asp-action="CreateLesson">Добавить предмет</a>
+        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <a asp-action="CreateLesson">Добавить предмет</a>
+        }
         <table class="table">
             <tr>
                 <th>
@@ -31,9 +34,15 @@
                     <td>@item.Name</td>
                     <td>@item.Cyclicality</td>
                     <td>
-                        <a asp-action="DetailsLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Подробнее</a> |
-                        <a asp-action="EditLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Изменить</a> |
-                        <a asp-action="DeleteLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Удалить</a>
+                        <a asp-action="DetailsLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">Подробнее</a>
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="EditLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">| Изменить</a>
+                        }
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="DeleteLesson" asp-controller="Lesson" asp-route-id="@item.Id_Lesson">| Удалить</a>
+                        }
                     </td>
                 </tr>
             }

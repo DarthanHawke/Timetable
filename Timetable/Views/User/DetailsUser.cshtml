@@ -1,0 +1,17 @@
+﻿@model Timetable.Models.UserID
+@{
+    ViewBag.Title = Model.Login;
+}
+<h2>Преподователь @Model.Login</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id_User</dd>
+
+        <dt>Специальность</dt>
+        <dd>@Model.Password</dd>
+
+        <dt>Кафедра</dt>
+        <dd>@Model.Access</dd>
+    </dl>
+</div>

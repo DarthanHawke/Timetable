@@ -5,7 +5,10 @@
 
 <form asp-action="Group" asp-controller="Group">
     <div class="form-group">
-        <a asp-action="CreateGroup">Добавить группу</a>
+        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <a asp-action="CreateGroup">Добавить группу</a>
+        }
         <table class="table">
             <tr>
                 <th>
@@ -31,9 +34,15 @@
                     <td>@item.Number</td>
                     <td>@item.NumberGroup</td>
                     <td>
-                        <a asp-action="DetailsGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Подробнее</a> |
-                        <a asp-action="EditGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Изменить</a> |
-                        <a asp-action="DeleteGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Удалить</a>
+                        <a asp-action="DetailsGroup" asp-controller="Group" asp-route-id="@item.Id_Group">Подробнее</a> 
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="EditGroup" asp-controller="Group" asp-route-id="@item.Id_Group">| Изменить</a> 
+}
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="DeleteGroup" asp-controller="Group" asp-route-id="@item.Id_Group">| Удалить</a>
+                        }
                     </td>
                 </tr>
             }

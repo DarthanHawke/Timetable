@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Timetable.Models.UserID>
+@{
+    ViewBag.Title = "Пользователи";
+}
+
+<form asp-action="User" asp-controller="User">
+    <div class="form-group">
+        <a asp-action="CreateTeacher">Добавить преподователя</a>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="User" asp-route-sortOrder="@ViewBag.LoginSort">
+                        Логин
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="User" asp-route-sortOrder="@ViewBag.PasswordSort">
+                        Пароль
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="User" asp-route-sortOrder="@ViewBag.AccessSort">
+                        Доступ
+                    </a>
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Login</td>
+                    <td>@item.Password</td>
+                    <td>@item.Access</td>
+                    <td>
+                        <a asp-action="DetailsUser" asp-controller="User" asp-route-id="@item.Id_User">Подробнее</a> |
+                        <a asp-action="EditUser" asp-controller="User" asp-route-id="@item.Id_User">Изменить</a> |
+                        <a asp-action="DeleteUser" asp-controller="User" asp-route-id="@item.Id_User">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</form>

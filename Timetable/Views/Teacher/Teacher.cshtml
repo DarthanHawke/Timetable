@@ -5,7 +5,10 @@
 
 <form asp-action="Teacher" asp-controller="Teacher">
     <div class="form-group">
-        <a asp-action="CreateTeacher">Добавить преподователя</a>
+        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <a asp-action="CreateTeacher">Добавить преподователя</a>
+        }
         <table class="table">
             <tr>
                 <th>
@@ -37,9 +40,15 @@
                     <td>@item.Department</td>
                     <td>@item.Title</td>
                     <td>
-                        <a asp-action="DetailsTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Подробнее</a> |
-                        <a asp-action="EditTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Изменить</a> |
-                        <a asp-action="DeleteTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Удалить</a>
+                        <a asp-action="DetailsTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">Подробнее</a> 
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="EditTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">| Изменить</a>
+                        } 
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="DeleteTeacher" asp-controller="Teacher" asp-route-id="@item.Id_Teacher">| Удалить</a>
+                        }
                     </td>
                 </tr>
             }

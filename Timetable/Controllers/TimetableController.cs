@@ -147,8 +147,10 @@ namespace Timetable.Controllers
             return RedirectToAction("СhangeTimetable");
         }
 
-        public async Task<IActionResult> DetailsTimetable(int? id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DetailsTimetable(NewTimetable newtimetables)
         {
+            int? id = newtimetables.Id_Date;
             if (id != null)
             {
                 TimetableU timetable = await ttdb.Timetables.FirstOrDefaultAsync(p => p.Id_Date == id);
@@ -158,7 +160,7 @@ namespace Timetable.Controllers
             return NotFound();
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditTimetable(int? id)
         {
             if (id != null)
@@ -205,6 +207,24 @@ namespace Timetable.Controllers
                 return RedirectToAction("СhangeTimetable");
             }
             return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(string searchString)
+        {
+            IQueryable<NewTimetable> newtimetables = NewTimetable();
+
+            IQueryable<NewTimetable> allsearch = newtimetables.Where(a => a.NumberClass.Contains(searchString))
+            .Union(newtimetables.Where(a => a.NumberGroup.ToString().Contains(searchString)))
+            .Union(newtimetables.Where(a => a.Course.ToString().Contains(searchString)))
+            .Union(newtimetables.Where(a => a.NameLesson.Contains(searchString)))
+            .Union(newtimetables.Where(a => a.FIOteacher.Contains(searchString)));
+            if (allsearch == null || !allsearch.Any())
+            {
+                ViewBag.Error = "Упс. Похоже по вашему запросу ничего не нашлось.";
+                return NotFound();
+            }
+            return View(await allsearch.ToListAsync());
         }
     }
 }

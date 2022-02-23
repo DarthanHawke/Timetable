@@ -7,6 +7,11 @@
 <form method="post">
 </form>
 
+@if (ViewContext.HttpContext.User.IsInRole("Admin"))
+{
+    <div><a asp-action="СhangeTimetable" asp-controller="Timetable">Изменить расписание</a></div>
+}
+
 <table class="table">
     <tr>
         <th>Время</th>

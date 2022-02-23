@@ -5,7 +5,10 @@
 
 <form asp-action="СhangeTimetable" asp-controller="Timetable">
     <div class="form-group">
-        <a asp-action="CreateTimetable">Добавить пару</a>
+        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <a asp-action="CreateTimetable">Добавить пару</a>
+        }
         <table class="table">
             <tr>
                 <th>
@@ -41,19 +44,25 @@
             </tr>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@item.Date</td>
-                <td>@item.Course</td>
-                <td>@item.NumberGroup</td>
-                <td>@item.FIOteacher</td>
-                <td>@item.NameLesson</td>
-                <td>@item.NumberClass</td>
-                <td>
-                    <a asp-action="DetailsTimetable" asp-controller="СhangeTimetable" asp-route-id="@item.Id_Date">Подробнее</a> |
-                    <a asp-action="EditTimetable" asp-controller="СhangeTimetable" asp-route-id="@item.Id_Date">Изменить</a> |
-                    <a asp-action="DeleteTimetable" asp-controller="СhangeTimetable" asp-route-id="@item.Id_Date">Удалить</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.Date</td>
+                    <td>@item.Course</td>
+                    <td>@item.NumberGroup</td>
+                    <td>@item.FIOteacher</td>
+                    <td>@item.NameLesson</td>
+                    <td>@item.NumberClass</td>
+                    <td>
+                        <a asp-action="DetailsTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">Подробнее</a> 
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="EditTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">| Изменить</a>
+                        }
+                        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+                        {
+                            <a asp-action="DeleteTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">| Удалить</a>
+                        }
+                    </td>
+                </tr>
             }
         </table>
     </div>

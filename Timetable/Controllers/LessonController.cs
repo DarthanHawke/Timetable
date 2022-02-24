@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Timetable.Controllers
 {
@@ -15,6 +17,19 @@ namespace Timetable.Controllers
         {
             ldb = context;
         }
+
+        public class Lists
+        {
+            public string Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Lists> typeLessons = new List<Lists>
+        {
+            new Lists { Id = "Лекция", Names = "Лекция" },
+            new Lists { Id = "Практика", Names = "Практика" },
+            new Lists { Id = "Лабораторная", Names = "Лабораторная" }
+        };
 
         public async Task<IActionResult> Lesson(LessonSortState sortOrder = LessonSortState.NameAsc)
         {
@@ -36,6 +51,7 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult CreateLesson()
         {
+            ViewBag.TypeLessons = new SelectList(typeLessons, "Id", "Names");
             return View();
         }
 
@@ -64,6 +80,7 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
+                ViewBag.TypeLessons = new SelectList(typeLessons, "Id", "Names");
                 LessonU lesson = await ldb.Lessons.FirstOrDefaultAsync(p => p.Id_Lesson == id);
                 if (lesson != null)
                     return View(lesson);

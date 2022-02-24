@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Timetable.Controllers
 {
@@ -16,6 +19,39 @@ namespace Timetable.Controllers
         {
             gdb = context;
         }
+
+        public class Listsint
+        {
+            public int Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Listsint> courses = new List<Listsint>
+        {
+            new Listsint { Id = 1, Names = "1 курс" },
+            new Listsint { Id = 2, Names = "2 курс" },
+            new Listsint { Id = 3, Names = "3 курс" },
+            new Listsint { Id = 4, Names = "4 курс" },
+            new Listsint { Id = 5, Names = "5 курс" },
+            new Listsint { Id = 11, Names = "1 курс магистратуры" },
+            new Listsint { Id = 12, Names = "2 курс магистратуры" }
+        };
+
+        IEnumerable<Listsint> groups = new List<Listsint>
+        {
+            new Listsint { Id = 1, Names = "1 группа" },
+            new Listsint { Id = 2, Names = "2 группа" },
+            new Listsint { Id = 3, Names = "3 группа" },
+            new Listsint { Id = 4, Names = "4 группа" },
+            new Listsint { Id = 5, Names = "5 группа" },
+            new Listsint { Id = 6, Names = "6 группа" },
+            new Listsint { Id = 61, Names = "61 группа" },
+            new Listsint { Id = 62, Names = "62 группа" },
+            new Listsint { Id = 71, Names = "71 группа" },
+            new Listsint { Id = 9, Names = "9 группа" },
+            new Listsint { Id = 91, Names = "91 группа" },
+            new Listsint { Id = 10, Names = "10 группа" }
+        };
 
         public async Task<IActionResult> Group(GroupSortState sortOrder = GroupSortState.CourseAsc)
         {
@@ -40,6 +76,8 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult CreateGroup()
         {
+            ViewBag.Courses = new SelectList(courses, "Id", "Names");
+            ViewBag.Groups = new SelectList(groups, "Id", "Names");
             return View();
         }
 
@@ -68,6 +106,8 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
                 GroupU group = await gdb.Groups.FirstOrDefaultAsync(p => p.Id_Group == id);
                 if (group != null)
                     return View(group);

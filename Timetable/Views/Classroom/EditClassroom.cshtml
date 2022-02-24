@@ -9,7 +9,7 @@
     </div>
     <div class="form-group">
         <label asp-for="TypeClass" class="control-label">Тип аудитории</label>
-        <input type="text" asp-for="TypeClass" class="form-control" />
+        <select asp-for="TypeClass" asp-items="@ViewBag.TypeClasses" class="form-control"></select>
     </div>
     <div class="form-group">
         <label asp-for="Capacity" class="control-label">Вместимость</label>
@@ -17,11 +17,11 @@
     </div>
     <div class="form-group">
         <label asp-for="Projector" class="control-label">Проектор</label>
-        <input type="number" asp-for="Projector" class="form-control" />
+        <select asp-for="Projector" asp-items="@ViewBag.Equipments" class="form-control"></select>
     </div>
     <div class="form-group">
         <label asp-for="Board" class="control-label">Доска</label>
-        <input type="number" asp-for="Board" class="form-control" />
+        <select asp-for="Board" asp-items="@ViewBag.Equipments" class="form-control"></select>
     </div>
     <div class="form-group">
         <input type="submit" value="Сохранить" class="btn btn-default" />

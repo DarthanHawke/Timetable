@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Timetable.Controllers
 {
@@ -16,6 +18,31 @@ namespace Timetable.Controllers
         {
             cdb = context;
         }
+
+        public class Lists
+        {
+            public string Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Lists> typeclasses = new List<Lists>
+        {
+            new Lists { Id = "Лекционная", Names = "Лекционная" },
+            new Lists { Id = "Семинарная", Names = "Семинарная" },
+            new Lists { Id = "Лабораторная", Names = "Лабораторная" }
+        };
+
+        public class Listsint
+        {
+            public int Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Listsint> equipments = new List<Listsint>
+        {
+            new Listsint { Id = 1, Names = "Да" },
+            new Listsint { Id = 0, Names = "Нет" }
+        };
 
         public async Task<IActionResult> Classroom(ClassroomSortState sortOrder = ClassroomSortState.NumberClassAsc)
         {
@@ -40,6 +67,8 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult CreateClassroom()
         {
+            ViewBag.Typeclasses = new SelectList(typeclasses, "Id", "Names");
+            ViewBag.Equipments = new SelectList(equipments, "Id", "Names");
             return View();
         }
 
@@ -68,6 +97,8 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
+                ViewBag.Typeclasses = new SelectList(typeclasses, "Id", "Names");
+                ViewBag.Equipments = new SelectList(equipments, "Id", "Names");
                 Classroom classroom = await cdb.Classrooms.FirstOrDefaultAsync(p => p.Id_Class == id);
                 if (classroom != null)
                     return View(classroom);

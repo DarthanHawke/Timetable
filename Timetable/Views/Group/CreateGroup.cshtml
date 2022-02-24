@@ -5,15 +5,15 @@
 <form asp-action="EditGroup" asp-controller="Group">
     <div class="form-group">
         <label asp-for="Course" class="control-label">Курс</label>
-        <input type="number" asp-for="Course" class="form-control" />
+        <select asp-for="Course" asp-items="@ViewBag.Courses" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberGroup" class="control-label">Номер</label>
+        <select asp-for="NumberGroup" asp-items="@ViewBag.Groups" class="form-control"></select>
     </div>
     <div class="form-group">
         <label asp-for="Number" class="control-label">Колличество человек</label>
         <input type="number" asp-for="Number" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="NumberGroup" class="control-label">Номер</label>
-        <input type="number" asp-for="NumberGroup" class="form-control" />
     </div>
     <div class="form-group">
         <input type="submit" value="Отправить" class="btn btn-default" />

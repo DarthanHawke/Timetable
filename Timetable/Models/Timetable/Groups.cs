@@ -72,10 +72,10 @@ public class СhoiceViewModel
                 cours = "5";
                 break;
             case Courses.CoursM1:
-                cours = "магистратура 1";
+                cours = "11";
                 break;
             case Courses.CoursM2:
-                cours = "магистратура 2";
+                cours = "12";
                 break;
         }
         return cours;

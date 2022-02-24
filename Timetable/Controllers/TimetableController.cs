@@ -22,6 +22,74 @@ namespace Timetable.Controllers
             ttdb = context;
         }
 
+        public class Lists
+        {
+            public string Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Lists> weeks = new List<Lists>
+        {
+            new Lists { Id = "Понедельник", Names = "Понедельник" },
+            new Lists { Id = "Вторник", Names = "Вторник" },
+            new Lists { Id = "Среда", Names = "Среда" },
+            new Lists { Id = "Четверг", Names = "Четверг" },
+            new Lists { Id = "Пятница", Names = "Пятница" },
+            new Lists { Id = "Суббота", Names = "Суббота" }
+        };
+
+        IEnumerable<Lists> times = new List<Lists>
+        {
+            new Lists { Id = "08:00", Names = "08:00" },
+            new Lists { Id = "09:45", Names = "09:45" },
+            new Lists { Id = "11:30", Names = "11:30" },
+            new Lists { Id = "13:25", Names = "13:25" },
+            new Lists { Id = "15:10", Names = "15:10" },
+            new Lists { Id = "16:55", Names = "16:55" },
+            new Lists { Id = "18:40", Names = "18:40" },
+            new Lists { Id = "20:10", Names = "20:10" }
+        };
+
+        IEnumerable<Lists> integrits = new List<Lists>
+        {
+            new Lists { Id = "Числитель", Names = "Числитель" },
+            new Lists { Id = "Знаменатель", Names = "Знаменатель" },
+            new Lists { Id = "Целое", Names = "Целое" }
+        };
+
+        public class Listsint
+        {
+            public int Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Listsint> courses = new List<Listsint>
+        {
+            new Listsint { Id = 1, Names = "1 курс" },
+            new Listsint { Id = 2, Names = "2 курс" },
+            new Listsint { Id = 3, Names = "3 курс" },
+            new Listsint { Id = 4, Names = "4 курс" },
+            new Listsint { Id = 5, Names = "5 курс" },
+            new Listsint { Id = 11, Names = "1 курс магистратуры" },
+            new Listsint { Id = 12, Names = "2 курс магистратуры" }
+        };
+
+        IEnumerable<Listsint> groups = new List<Listsint>
+        {
+            new Listsint { Id = 1, Names = "1 группа" },
+            new Listsint { Id = 2, Names = "2 группа" },
+            new Listsint { Id = 3, Names = "3 группа" },
+            new Listsint { Id = 4, Names = "4 группа" },
+            new Listsint { Id = 5, Names = "5 группа" },
+            new Listsint { Id = 6, Names = "6 группа" },
+            new Listsint { Id = 61, Names = "61 группа" },
+            new Listsint { Id = 62, Names = "62 группа" },
+            new Listsint { Id = 71, Names = "71 группа" },
+            new Listsint { Id = 9, Names = "9 группа" },
+            new Listsint { Id = 91, Names = "91 группа" },
+            new Listsint { Id = 10, Names = "10 группа" }
+        };
+
         public IQueryable<NewTimetable> NewTimetable()
         {
             IQueryable<NewTimetable> NewTimetables = from timetable in ttdb.Timetables
@@ -156,6 +224,11 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult CreateTimetable()
         {
+            ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+            ViewBag.Times = new SelectList(times, "Id", "Names");
+            ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+            ViewBag.Courses = new SelectList(courses, "Id", "Names");
+            ViewBag.Groups = new SelectList(groups, "Id", "Names");
             return View();
         }
 
@@ -180,6 +253,7 @@ namespace Timetable.Controllers
                 Id_Teacher = id_teacher,
                 Id_Group = id_group
             };
+
             ttdb.Timetables.Add(timetable);
             await ttdb.SaveChangesAsync();
             return RedirectToAction("СhangeTimetable");
@@ -203,6 +277,11 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
                 IQueryable<NewTimetable> newtimetables = NewTimetable();
                 var newtimetable = await newtimetables.FirstOrDefaultAsync(p => p.Id_Date == id);
                 if (newtimetable != null)

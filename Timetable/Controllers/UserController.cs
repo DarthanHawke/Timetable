@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Timetable.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 namespace Timetable.Controllers
@@ -17,6 +19,19 @@ namespace Timetable.Controllers
         {
             tdb = context;
         }
+
+        public class Lists
+        {
+            public string Id { get; set; }
+            public string Names { get; set; }
+        }
+
+        IEnumerable<Lists> accesses = new List<Lists>
+        {
+            new Lists { Id = "Admin", Names = "Админ" },
+            new Lists { Id = "User", Names = "Пользователь" }
+        };
+
 
         public async Task<IActionResult> User(UserSortState sortOrder = UserSortState.Id_UserAsc)
         {
@@ -38,6 +53,7 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult CreateUser()
         {
+            ViewBag.Accesses = new SelectList(accesses, "Id", "Names");
             return View();
         }
 
@@ -66,6 +82,7 @@ namespace Timetable.Controllers
         {
             if (id != null)
             {
+                ViewBag.Accesses = new SelectList(accesses, "Id", "Names");
                 UserID user = await tdb.UserID.FirstOrDefaultAsync(p => p.Id_User == id);
                 if (user != null)
                     return View(user);
@@ -84,7 +101,7 @@ namespace Timetable.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        [ActionName("DeleteTeacher")]
+        [ActionName("DeleteUser")]
         public async Task<IActionResult> ConfirmDelete(int? id)
         {
             if (id != null)

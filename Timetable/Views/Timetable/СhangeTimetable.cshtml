@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Список пар";
 }
-
+<h1>@ViewBag.Exception</h1>
 <form asp-action="СhangeTimetable" asp-controller="Timetable">
     <div class="form-group">
         @if (ViewContext.HttpContext.User.IsInRole("Admin"))
@@ -58,7 +58,7 @@
                     <td>@item.NameLesson</td>
                     <td>@item.NumberClass</td>
                     <td>
-                        <a asp-action="DetailsTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">Подробнее</a> 
+                        <a asp-action="DetailsTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">Подробнее</a>
                         @if (ViewContext.HttpContext.User.IsInRole("Admin"))
                         {
                             <a asp-action="EditTimetable" asp-controller="Timetable" asp-route-id="@item.Id_Date">| Изменить</a>

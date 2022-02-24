@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Timetable.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace Timetable.Controllers
 {
@@ -17,6 +18,15 @@ namespace Timetable.Controllers
         public IActionResult index()
         {
             return View();
+        }
+        [Route("GetExceptionInfo")]
+        [HttpGet]
+        public IEnumerable<string> GetExceptionInfo()
+        {
+            string[] arrRetValues = null;
+            if (arrRetValues.Length > 0)
+            { }
+            return arrRetValues;
         }
     }
 }

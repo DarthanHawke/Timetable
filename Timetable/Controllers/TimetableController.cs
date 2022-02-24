@@ -236,15 +236,128 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTimetable(NewTimetable newtimetables)
         {
-            var id_lesson = ttdb.Lessons.FirstOrDefault(p => p.Name == newtimetables.NameLesson).Id_Lesson;
-            var id_class = ttdb.Classrooms.FirstOrDefault(p => p.NumberClass == newtimetables.NumberClass).Id_Class;
-            var id_teacher = ttdb.Teachers.FirstOrDefault(p => p.FIO == newtimetables.FIOteacher).Id_Teacher;
-            var id_group = ttdb.Groups.Where(p => p.NumberGroup == newtimetables.NumberGroup)
+            var exceptiontime = NewTimetable();
+            exceptiontime = exceptiontime.Where(p => p.NumberGroup == newtimetables.NumberGroup)
                 .Where(p => p.Course == newtimetables.Course)
-                .FirstOrDefault(p => p.NumberGroup == newtimetables.NumberGroup).Id_Group;
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time)
+                .Where(p => p.Integrity == newtimetables.Integrity);
+            var exceptionteacher = NewTimetable();
+            exceptionteacher = exceptionteacher.Where(p => p.FIOteacher == newtimetables.FIOteacher)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time)
+                .Where(p => p.Integrity == newtimetables.Integrity);
+            var exceptionclass = NewTimetable();
+            exceptionclass = exceptionclass.Where(p => p.NumberClass == newtimetables.NumberClass)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time)
+                .Where(p => p.Integrity == newtimetables.Integrity);
+            var exceptioninteg = NewTimetable();
+            exceptioninteg = exceptioninteg.Where(p => p.Integrity == "Целое")
+                .Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time);
+            var exceptionnum = NewTimetable();
+            exceptionnum = exceptionnum.Where(p => p.Integrity == "Числитель")
+                .Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time);
+            var exceptiondec = NewTimetable();
+            exceptiondec = exceptiondec.Where(p => p.Integrity == "Знаменатель")
+                .Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time);
 
+            if (exceptiontime.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данное время уже занято кем-то. Попробуйте изменить запрос.";
+                return View();
+            }
+            else if (exceptionteacher.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данный преподаватель занят в это время. Попробуйте изменить запрос.";
+                return View();
+            }
+            else if (exceptionclass.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данная аудитория уже занята кем-то. Попробуйте изменить запрос.";
+                return View();
+            }
+            else if((newtimetables.Integrity == "Числитель" || newtimetables.Integrity == "Знаменатель") && exceptioninteg.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данное время уже занято кем-то. Попробуйте изменить запрос.";
+                return View();
+            }
+            else if (newtimetables.Integrity == "Целое" && (exceptionnum.Any() || exceptiondec.Any()))
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данное время уже занято кем-то. Попробуйте изменить запрос.";
+                return View();
+            }
+            var id_les = ttdb.Lessons.Where(p => p.Name == newtimetables.NameLesson);
+            var id_cl = ttdb.Classrooms.Where(p => p.NumberClass == newtimetables.NumberClass);
+            var id_teac = ttdb.Teachers.Where(p => p.FIO == newtimetables.FIOteacher);
+            var id_gr = ttdb.Groups.Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                    .Where(p => p.Course == newtimetables.Course);
+            if (!id_gr.Any() || !id_teac.Any() || !id_cl.Any() || !id_les.Any())
+            {
+                if (!id_gr.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранной группы не существует. Попробуйте изменить запрос.";
+                }
+                else if (!id_teac.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранного преподавателя не существует. Попробуйте изменить запрос.";
+                }
+                else if (!id_cl.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранной аудитории не существует. Попробуйте изменить запрос.";
+                }
+                else if (!id_les.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранного предмета не существует. Попробуйте изменить запрос.";
+                }
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                return View();
+            }
+            int id_group = id_gr.FirstOrDefault(p => p.NumberGroup == newtimetables.NumberGroup).Id_Group;
+            int id_lesson = ttdb.Lessons.FirstOrDefault(p => p.Name == newtimetables.NameLesson).Id_Lesson;
+            int id_class = ttdb.Classrooms.FirstOrDefault(p => p.NumberClass == newtimetables.NumberClass).Id_Class;
+            int id_teacher = ttdb.Teachers.FirstOrDefault(p => p.FIO == newtimetables.FIOteacher).Id_Teacher;
             TimetableU timetable = new TimetableU
             {
+                Id_Date = newtimetables.Id_Date,
                 Week = newtimetables.Week,
                 Time = newtimetables.Time,
                 Integrity = newtimetables.Integrity,
@@ -294,15 +407,129 @@ namespace Timetable.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditTimetable(NewTimetable newtimetables)
         {
-            var id_lesson = ttdb.Lessons.FirstOrDefault(p => p.Name == newtimetables.NameLesson).Id_Lesson;
-            var id_class = ttdb.Classrooms.FirstOrDefault(p => p.NumberClass == newtimetables.NumberClass).Id_Class;
-            var id_teacher = ttdb.Teachers.FirstOrDefault(p => p.FIO == newtimetables.FIOteacher).Id_Teacher;
-            var id_group = ttdb.Groups.Where(p => p.NumberGroup == newtimetables.NumberGroup)
+            var exceptiontime = NewTimetable();
+            exceptiontime = exceptiontime.Where(p => p.NumberGroup == newtimetables.NumberGroup)
                 .Where(p => p.Course == newtimetables.Course)
-                .FirstOrDefault(p => p.NumberGroup == newtimetables.NumberGroup).Id_Group;
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time)
+                .Where(p => p.Integrity == newtimetables.Integrity);
+            var exceptionteacher = NewTimetable();
+            exceptionteacher = exceptionteacher.Where(p => p.FIOteacher == newtimetables.FIOteacher)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time)
+                .Where(p => p.Integrity == newtimetables.Integrity);
+            var exceptionclass = NewTimetable();
+            exceptionclass = exceptionclass.Where(p => p.NumberClass == newtimetables.NumberClass)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time)
+                .Where(p => p.Integrity == newtimetables.Integrity);
+            var exceptioninteg = NewTimetable();
+            exceptioninteg = exceptioninteg.Where(p => p.Integrity == "Целое")
+                .Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time);
+            var exceptionnum = NewTimetable();
+            exceptionnum = exceptionnum.Where(p => p.Integrity == "Числитель")
+                .Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time);
+            var exceptiondec = NewTimetable();
+            exceptiondec = exceptiondec.Where(p => p.Integrity == "Знаменатель")
+                .Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                .Where(p => p.Course == newtimetables.Course)
+                .Where(p => p.Week == newtimetables.Week)
+                .Where(p => p.Time == newtimetables.Time);
+
+            if (exceptiontime.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данное время уже занято кем-то. Попробуйте изменить запрос.";
+                return View("СhangeTimetable");
+            }
+            else if (exceptionteacher.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данный преподаватель занят в это время. Попробуйте изменить запрос.";
+                return View("СhangeTimetable");
+            }
+            else if (exceptionclass.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данная аудитория уже занята кем-то. Попробуйте изменить запрос.";
+                return View("СhangeTimetable");
+            }
+            else if ((newtimetables.Integrity == "Числитель" || newtimetables.Integrity == "Знаменатель") && exceptioninteg.Any())
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данное время уже занято кем-то. Попробуйте изменить запрос.";
+                return View("СhangeTimetable");
+            }
+            else if (newtimetables.Integrity == "Целое" && (exceptionnum.Any() || exceptiondec.Any()))
+            {
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                ViewBag.Exception = "Похоже данное время уже занято кем-то. Попробуйте изменить запрос.";
+                return View("СhangeTimetable");
+            }
+            var id_les = ttdb.Lessons.Where(p => p.Name == newtimetables.NameLesson);
+            var id_cl = ttdb.Classrooms.Where(p => p.NumberClass == newtimetables.NumberClass);
+            var id_teac = ttdb.Teachers.Where(p => p.FIO == newtimetables.FIOteacher);
+            var id_gr = ttdb.Groups.Where(p => p.NumberGroup == newtimetables.NumberGroup)
+                    .Where(p => p.Course == newtimetables.Course);
+            if (!id_gr.Any() || !id_teac.Any() || !id_cl.Any() || !id_les.Any())
+            {
+                if (!id_gr.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранной группы не существует. Попробуйте изменить запрос.";
+                }
+                else if (!id_teac.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранного преподавателя не существует. Попробуйте изменить запрос.";
+                }
+                else if (!id_cl.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранной аудитории не существует. Попробуйте изменить запрос.";
+                }
+                else if (!id_les.Any())
+                {
+                    ViewBag.Exception = "Похоже выбранного предмета не существует. Попробуйте изменить запрос.";
+                }
+                ViewBag.Weeks = new SelectList(weeks, "Id", "Names");
+                ViewBag.Times = new SelectList(times, "Id", "Names");
+                ViewBag.Integrits = new SelectList(integrits, "Id", "Names");
+                ViewBag.Courses = new SelectList(courses, "Id", "Names");
+                ViewBag.Groups = new SelectList(groups, "Id", "Names");
+                return View("СhangeTimetable");
+            }
+            int id_group = id_gr.FirstOrDefault(p => p.NumberGroup == newtimetables.NumberGroup).Id_Group;
+            int id_lesson = ttdb.Lessons.FirstOrDefault(p => p.Name == newtimetables.NameLesson).Id_Lesson;
+            int id_class = ttdb.Classrooms.FirstOrDefault(p => p.NumberClass == newtimetables.NumberClass).Id_Class;
+            int id_teacher = ttdb.Teachers.FirstOrDefault(p => p.FIO == newtimetables.FIOteacher).Id_Teacher;
 
             TimetableU timetable = new TimetableU
             {
+                Id_Date = newtimetables.Id_Date,
                 Week = newtimetables.Week,
                 Time = newtimetables.Time,
                 Integrity = newtimetables.Integrity,

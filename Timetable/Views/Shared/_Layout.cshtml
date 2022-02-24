@@ -8,13 +8,23 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <form asp-controller="Timetable" asp-action="Search">
-        <p>
-            <input type="text" name="SearchString" />
-            <input type="submit" value="Поиск" />
-        </p>
-    </form>
     <header>
+        <nav class="navbar">
+            <div class="container">
+                <strong class="navbar-brand" style="background:none">
+                        <a href="/">
+                            <div class="block"><img src="/images/logo.jpg" width="160" height="160" alt="пмм" /></div>
+                            <div class="block"><pre> Факультет<br /> прикладной математики,<br /> механики и информатики</pre></div>
+                        </a>
+                </strong>
+                <div class="block1">
+                    <form asp-controller="Timetable" asp-action="Search">
+                            <input type="text" name="SearchString" />
+                            <input type="submit" value="Поиск" />
+                    </form>
+                    </div>
+                </div>
+        </nav>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Timetable</a>
@@ -58,7 +68,7 @@
             @RenderBody()
         </main>
     </div>
-
+    <br />
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2022 - Timetable - By Alexey Mitin

@@ -7,9 +7,62 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.hold {
+    width: 100%;
+    overflow: hidden;
+    padding: 0 0 58px;
+}
+
+.logo {
+    float: left;
+    overflow: hidden;
+    border: none;
+}
+
+.box {
+    float: right;
+    width: 272px;
+    padding: 55px 64px 0 0
+}
+
+.search-box {
+    width: 100%;
+    overflow: hidden;
+}
+
+.it {
+    overflow: hidden;
+    padding: 0 5px 0 0;
+    background: url(../images/bg-it.png) no-repeat 100% -39px;
+}
+
+    .it .ith {
+        height: 26px;
+        overflow: hidden;
+        padding: 6px 7px 7px 12px;
+        background: url(../images/bg-it.png) no-repeat;
+    }
+
+.block {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.block1 {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.block2 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
@@ -69,3 +122,4 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+

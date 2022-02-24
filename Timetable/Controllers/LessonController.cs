@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Timetable.Controllers
 {
+    [Authorize]
     public class LessonController : Controller
     {
         private LessonContext ldb;
